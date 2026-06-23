@@ -11,12 +11,17 @@ local function string_split(str, seperator)
 	return tokens
 end
 
+---@class obj.Face
+---@field v number Index of geometric vertex
+---@field vt number? Index of vertex texture coordinates
+---@field vn number? Index of vertex normal
+
 ---@class obj.ParsedObj
 ---@field v { x: number, y: number, z: number, w: number }[]
 ---@field vt { u: number, w: number, w: number }[]
 ---@field vn { x: number, y: number, z: number}[]
 ---@field vp { u: number, v: number?, w: number? }[]
----@field faces { v: number, vt: number?, vn: number? }[][]
+---@field faces obj.Face[][]
 
 ---Parses a Wavefront `.obj` file as a list of lines and returns a [ParsedObj](lua://obj.ParsedObj) containing information about the 3D model.
 ---@param lines string[]
@@ -32,7 +37,7 @@ local function parse(lines)
 		local args = string_split(line, "%s+")
 		local name = args[1]
 
-		if name == "v" then -- geometrix vertices
+		if name == "v" then -- geometric vertices
 			table.insert(v, {
 				x = tonumber(args[2]),
 				y = tonumber(args[3]),
